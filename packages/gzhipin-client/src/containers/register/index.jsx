@@ -14,7 +14,6 @@ import {
 import Logo from '../../components/Logo'
 
 const ListItem= List.Item
-const RadioItem = Radio.RadioItem
 
 const initialvalue={
     username:'joSE',
@@ -33,14 +32,14 @@ export default function Register(props){
         console.log(state)
     }
     function handleChange(name, value){
-        value.preventDefault()
+        
         // const {name, value}= e.target
         // console.log('asd ',name,value,'asdafd')
         setState({...state, [name]: value}) // values, usename, password, confirmpassword, type
     }
 
     const {type}=state
-    
+
     const toLogin=()=>{
         props.history.replace('/login')
     }
