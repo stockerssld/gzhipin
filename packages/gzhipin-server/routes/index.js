@@ -35,7 +35,7 @@ f) Registro cn error{code: 1, msg: 'Mensaje'}
 
 router.post('/register', function(req, res, next){
 	const { username, password, type } = req.body
-	UserModel.findOne({username}, function(err, userDoc){
+	UserModel.findOne({username}, function(err, user){
 		if(user){ // verificar si existe el usuario
 			res.send({code: 1, msg: 'El usuario ya existe.'})
 		}else{
