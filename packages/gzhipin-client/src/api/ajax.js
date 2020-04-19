@@ -1,0 +1,21 @@
+import React from 'react'
+import axios from 'axios'
+
+export default function Ajax(url, data={}, type='GET'){
+    if(type==='GET'){
+        // data: {username: name, password:pass}
+        // paramstr; username=namee&password=pass
+        let paramStr=''
+        Object.keys(data).forEach(key =>{
+            paramStr += key + '=' +data[key] +'&'
+        })
+
+        if(paramStr){
+            paramStr = paramStr.substring(0, paramStr.length-1)           
+        }
+        
+        return axios.get(url + '?' + paramStr)
+    }else{
+        return axios.post(url, data)
+    }
+}
