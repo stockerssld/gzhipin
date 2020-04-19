@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const md5 = require('blueimp-md5')
+const {UserModel} = require('./../db/models')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -19,15 +21,34 @@ f) Registro cn error{code: 1, msg: 'Mensaje'}
 2. Proceso
 3. Devolver la trasnmisión de datos de la respuesta
 */
-router.post('/register',function(req, res, next){
-	// 1. Obtener los parametos de busqueda
-	const {username, password}=req.body
-	// 2. Procesamiento
-	if(username=='admin'){ // Registro fallara
-		// Devolver respuesta
-		res.send({code: 1, msg: 'El usuario ya existe'})
-	}else{ //Registro exitoso
-		res.send({code: 0, data: {id: 'id', username, password} })
-	}
+// router.post('/register',function(req, res, next){
+// 	// 1. Obtener los parametos de busqueda
+// 	const {username, password}=req.body
+// 	// 2. Procesamiento
+// 	if(username=='admin'){ // Registro fallara
+// 		// Devolver respuesta
+// 		res.send({code: 1, msg: 'El usuario ya existe'})
+// 	}else{ //Registro exitoso
+// 		res.send({code: 0, data: {id: 'id', username, password} })
+// 	}
+// })
+
+router.post('/register', function(req, res, next){
+	const { username, password, type } = req.body
+	UserModel.findOne({username}, function(err, userDoc){
+		if(user){ // verificar si existe el usuario
+			res.send({code: 1, msg: 'El usuario ya existe.'})
+		}else{
+			new UserModel({ username, password: md5(password), type}).save(function(err, user){
+				res.cookie('userid', user.id, {maxAge: 1000*60*60*24})
+			
+			
+				const data = {username, type, _id: user._id} //No mandar la contraseña en la respuesta
+				res.send({code: 0, data})
+			})
+		}
+	})
+
 })
+
 module.exports = router;
