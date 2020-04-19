@@ -1,21 +1,21 @@
 {
   "name": "gzhipin-server",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./app"
+    "start": "nodemon ./bin/www"
   },
-  "main": "index.js",
-  "license": "MIT",
   "dependencies": {
-    "body-parse": "^0.1.0",
+    "blueimp-md5": "^2.13.0",
     "cookie-parser": "^1.4.5",
-    "cors": "^2.8.5",
     "debug": "^4.1.1",
     "ejs": "^3.0.2",
     "express": "^4.17.1",
     "http-errors": "^1.7.3",
-    "morgan": "^1.10.0",
-    "socket.io": "^2.3.0"
+    "mongoose": "^5.9.9",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
   }
 }
