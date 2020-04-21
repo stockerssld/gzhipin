@@ -12,7 +12,9 @@ import {
     Button
 } from 'antd-mobile'
 import { useState } from 'react'
-
+import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
+import {login} from './../../redux/Actions' 
 import Logo from '../../components/Logo'
 
 const ListItem=List.Item
@@ -22,11 +24,12 @@ const initialValue={
     password:   ''
 }
 
-export default function Login(props){
+function Login(props){
     const [state, setState]=useState(initialValue)
 
     const iniciarSesion=()=>{
         console.log(state)
+        props.login(state)
     }
 
     const handleChange=(name,value)=>{
@@ -37,6 +40,11 @@ export default function Login(props){
         props.history.replace('/register')
     }
 
+    const {msg, redirectTo}=props.user
+
+    if(redirectTo){
+        return <Redirect to={redirectTo}/>
+    }
     return(
         <>
             <NavBar>
@@ -45,6 +53,7 @@ export default function Login(props){
             <Logo/>
             <WingBlank>
                 <List>
+                    {msg ? <div className="error-msg">{msg}</div>:null}
                     <WhiteSpace/>
                     <InputItem placeholder="StockersSLD" value={state.username} onChange={val=>{handleChange('username', val)}}>Nombre</InputItem>
                     <InputItem type="password" placeholder="******"  value={state.password} onChange={val=>{handleChange('password', val)}}> Contraseña: </InputItem>
@@ -58,4 +67,12 @@ export default function Login(props){
         </>
     )
 }
+const stateToProps = state=>{
+    console.log(state)
+    return{
+        user: state.user
+    }
+}
 
+
+export default connect(stateToProps,{login})(Login)

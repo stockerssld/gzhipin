@@ -44,9 +44,9 @@ export const register=(user)=>{
 export const login=(user)=>{
     const {username, password}=user
     
-    if(!username){
-        return(errorMsg('Ya existe este usuario'))
-    } else if(!password){
+    if(!username && !password){
+        return(errorMsg('No existe este usuario'))
+    } else if( !username || !password){
         return(errorMsg('Credenciales invalidades'))
     }
     
