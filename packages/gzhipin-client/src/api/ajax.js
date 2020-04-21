@@ -1,7 +1,9 @@
 import React from 'react'
 import axios from 'axios'
 
+const baseUrl = ''
 export default function Ajax(url, data={}, type='GET'){
+    url=baseUrl+url
     if(type==='GET'){
         // data: {username: name, password:pass}
         // paramstr; username=namee&password=pass

@@ -11,39 +11,57 @@ import {
     Radio,
     Button
 } from 'antd-mobile'
+import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
+
+import './../../assets/css/index.less'
+
+
+import {register} from './../../redux/Actions'
+
 import Logo from '../../components/Logo'
 
 const ListItem= List.Item
 
+
 const initialvalue={
-    username:'joSE',
-    password:'123456789',
-    password2:'123456789',
+    username:'',
+    password:'',
+    password2:'',
     type:''
 }
-export default function Register(props){
-    
-   
+
+
+
+function Register(props){
     const [state, setState]=useState(initialvalue)
-    
-    // console.log(state)
-    
-    const register =()=>{
+
+    function register(e){
+        e.preventDefault()
         console.log(state)
+        props.register(state)
+
     }
+    
     function handleChange(name, value){
-        
         // const {name, value}= e.target
         // console.log('asd ',name,value,'asdafd')
         setState({...state, [name]: value}) // values, usename, password, confirmpassword, type
     }
 
-    const {type}=state
-
     const toLogin=()=>{
         props.history.replace('/login')
     }
-    return(
+
+    const {type}=state
+    const {msg, redirectTo}=props.user
+
+   
+    if(redirectTo){
+        return <Redirect to={redirectTo}/>
+    }
+
+    return(                
         <>
             <NavBar>
                 Empleos Directos
@@ -51,6 +69,7 @@ export default function Register(props){
             <Logo/>
             <WingBlank>
                 <List>
+                    {msg?<div className="error-msg">{msg}</div>:null}
                     <WhiteSpace/>
                     <InputItem placeholder="StockersSLD" value={state.username} onChange={val=>{handleChange('username', val)}}>Nombre</InputItem>
                     <WhiteSpace/>
@@ -60,8 +79,8 @@ export default function Register(props){
                     <WhiteSpace/>
                     <ListItem>
                         <span>Tipo de usuario</span>
-                        <Radio checked={type==='Hombre'} onChange={()=>handleChange('type','Hombre')}>Hombre</Radio>
-                        <Radio checked={type==='Mujer'} onChange={()=>handleChange('type','Mujer')}>Mujer</Radio>
+                        <Radio checked={type==='Laoban'} onChange={()=>handleChange('type','Laoban')}>Laoban</Radio>
+                        <Radio checked={type==='Dashen'} onChange={()=>handleChange('type','Dashen')}>Dashen</Radio>
                     </ListItem>
                     <WhiteSpace/>
                     <Button type="primary" onClick={register}>Crear Cuenta</Button>
@@ -73,3 +92,11 @@ export default function Register(props){
     )
 }
 
+const stateToProps = state=>{
+    console.log(state)
+    return{
+        user: state.user
+    }
+}
+
+export default connect( stateToProps, {register})(Register)

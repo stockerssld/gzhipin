@@ -30,7 +30,6 @@ export default function Login(props){
     }
 
     const handleChange=(name,value)=>{
-        
         setState({...state, [name]: value})
     }
     const {type}= state

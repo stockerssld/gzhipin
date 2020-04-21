@@ -7,16 +7,17 @@ import {AUTH_SUCCESS,ERROR_MSG} from './Action-types'
 let initUser={
     username:'',
     type:'',
-    msg:''
+    msg:'',
+    redirectTo:''
 }
 
 // Estado del usuario
 function user(state=initUser, action){
     switch(action.type){
         case AUTH_SUCCESS: //datos de usuario
-            return  {...state, ...action.data}
+            return  {...state, ...action.data, redirectTo: '/'}
         case ERROR_MSG: //imformacion del msg
-            return {...state, mgs: action.data}
+            return {...state, msg: action.data}
         default:
             return state
     }

@@ -10,18 +10,28 @@ const authSucces=(user)=>({
     type: AUTH_SUCCESS,
     data:user
 })
-const errorMsg=()=>({
+const errorMsg=(msg)=>({
     type: ERROR_MSG, data: msg
 })
 
 // Action
 export const register=(user)=>{
+    const {username, password, password2, type}=user
+    if(!username && !password&& !password2 && !type){
+        return errorMsg('No se han llenado todo los campos')   
+    }
+    else if(!username){
+        return errorMsg('Ya existe este usuario')
+    } else if(password!==password2){
+        return errorMsg('La contraseñas no coinciden')
+    }
+    
     return async dispatch=>{
         // const response = areqRegister(user)
         // promise.then(response=>{
         //     const result = response.data // {code 0/1, data: user, msg:'}
         // })
-        const response = await areqRegister(user)
+        const response = await reqRegister({username, password, type})
         const result = response.data // {code 0/1, data: user, msg:'}
         if(result.code===0){
             dispatch(authSucces(result.data))
@@ -32,6 +42,14 @@ export const register=(user)=>{
 }
 
 export const login=(user)=>{
+    const {username, password}=user
+    
+    if(!username){
+        return(errorMsg('Ya existe este usuario'))
+    } else if(!password){
+        return(errorMsg('Credenciales invalidades'))
+    }
+    
     return async dispatch=>{
         // const response = reqLogin(user)
         // promise.then(response=>{
