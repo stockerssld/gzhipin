@@ -10,7 +10,7 @@ import DashenInfo from '../dashen-info'
 export default function Main(){
     return(
         <Switch>
-            <Route path="/loabanInfo" component={LoabanInfo} />
+            <Route path="/laobanInfo" component={LoabanInfo} />
             <Route path='/dashenInfo' component={DashenInfo}/>
         </Switch>
     )

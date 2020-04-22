@@ -79,8 +79,8 @@ function Register(props){
                     <WhiteSpace/>
                     <ListItem>
                         <span>Tipo de usuario</span>
-                        <Radio checked={type==='Laoban'} onChange={()=>handleChange('type','Laoban')}>Laoban</Radio>
-                        <Radio checked={type==='Dashen'} onChange={()=>handleChange('type','Dashen')}>Dashen</Radio>
+                        <Radio checked={type==='laoban'} onChange={()=>handleChange('type','laoban')}>Laoban</Radio>
+                        <Radio checked={type==='dashen'} onChange={()=>handleChange('type','dashen')}>Dashen</Radio>
                     </ListItem>
                     <WhiteSpace/>
                     <Button type="primary" onClick={register}>Crear Cuenta</Button>
