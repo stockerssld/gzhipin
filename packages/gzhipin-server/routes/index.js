@@ -66,4 +66,34 @@ router.post('/login', function( req, res, next){
 		}
 	})
 })
+
+
+router.post('/update', function(req, res){
+	const userid=req.cookies.userid
+	// console.log(userid)
+	if(!userid){	
+		return res.send({code:1, msg:'Debe iniciar sesión primero'})
+	}
+	const user = req.body
+	// console.log(req)
+	// res.json({req:req.cookies})
+	UserModel.findByIdAndUpdate({_id: userid},user, function(error, oldUser){
+		if(!oldUser){
+			res.clearCookie('userid')
+			res.send({code:1,msg:'por favor iniciar primero'})
+		}else{
+			const { _id, username, type }=oldUser
+			const data = Object.assign({ _id, username, type }, user)
+			  
+			res.send({code: 0, data})
+			// return res.json({status:"Operación Realizada", user:data})
+		}
+	})
+
+
+})
+
 module.exports = router;
+
+
+// video 36
