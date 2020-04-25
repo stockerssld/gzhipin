@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
 import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 import  {NavBar, InputItem, TextareaItem, Button} from 'antd-mobile'
 import { HeaderSelector } from '../../components/Logo/header-selector'
-
+import {updateUser} from './../../redux/Actions'
 const initialState={
     header:'',
     post:'',    
@@ -11,7 +12,7 @@ const initialState={
     salary:''
 }
 
-function  LoabanInfo(){
+function  LoabanInfo(props){
     const [state, setstate] = useState(initialState)
     console.log(state,"state")
 
@@ -26,8 +27,16 @@ function  LoabanInfo(){
     }
     
     const save=(e)=>{
-        console.log(state)
+        // console.log(state)
+        props.updateUser(state)
     }
+
+    const { header, type } = props.user
+    if(header){
+        const path = type === 'dashen' ? '/dashen':'/loaban'
+        return <Redirect to={path}/>
+    }
+
     return(
         <>
         <NavBar>Empleos Directors</NavBar>
@@ -51,6 +60,6 @@ function  LoabanInfo(){
 
 
 export default connect(
-    state=>({}),
-    {}
+    state=>({user: state.user}),
+    {updateUser}
 )(LoabanInfo)

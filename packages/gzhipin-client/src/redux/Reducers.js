@@ -3,7 +3,7 @@ curso 29
     Reducer: state, action, state
 */
 import {combineReducers} from 'redux'
-import {AUTH_SUCCESS,ERROR_MSG} from './Action-types'
+import {AUTH_SUCCESS,ERROR_MSG, RECEIVE_USER, RESET_USER} from './Action-types'
 import {getRedirectTo} from './../utils/index'
 
 
@@ -23,6 +23,10 @@ function user(state=initUser, action){
             return  {...state, ...action.data, redirectTo: getRedirectTo(type,header)}
         case ERROR_MSG: //imformacion del msg
             return {...state, msg: action.data}
+        case RECEIVE_USER:
+            return action.data
+        case RESET_USER:
+            return  {...initUser, msg: action.data}
         default:
             return state
     }

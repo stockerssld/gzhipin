@@ -3,15 +3,26 @@
     Action
     Action
 */
-import {reqRegister,reqLogin} from './../api'
-import {AUTH_SUCCESS,ERROR_MSG} from './Action-types'
+import {reqRegister,reqLogin, reqUpdateUser} from './../api'
+import {AUTH_SUCCESS,ERROR_MSG, RECEIVE_USER, RESET_USER} from './Action-types'
 
 const authSucces=(user)=>({
     type: AUTH_SUCCESS,
     data:user
 })
 const errorMsg=(msg)=>({
-    type: ERROR_MSG, data: msg
+    type: ERROR_MSG,
+    data: msg
+})
+
+const receiveUser=(user)=>({
+    type: RECEIVE_USER, 
+    data: user
+})
+
+const resetUser=(msg)=>({
+    type: RESET_USER, 
+    data: msg
 })
 
 // Action
@@ -61,6 +72,18 @@ export const login=(user)=>{
             dispatch(authSucces(result.data))
         }else{
             dispatch(errorMsg(result.msg))
+        }
+    }
+}
+
+export const updateUser = (user)=>{
+    return async distpatch=>{
+        const response= await reqUpdateUser(user)
+        const result = response.data
+        if(result.code===0){
+            distpatch(receiveUser(result.data))
+        }else{
+            distpatch(resetUser(result.msg))
         }
     }
 }

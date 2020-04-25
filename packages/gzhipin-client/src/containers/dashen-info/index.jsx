@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 import  {NavBar, InputItem, Button, TextareaItem} from 'antd-mobile'
 import { HeaderSelector } from '../../components/Logo/header-selector'
+import {updateUser} from './../../redux/Actions'
 
 const initialState={
     header:'',
     post:'',
     company:''
 }
-function DashenInfo(){
+function DashenInfo(props){
     const [state, setstate] = useState(initialState)
     console.log(state,"state")
 
@@ -20,7 +22,14 @@ function DashenInfo(){
     }
 
     const save=e=>{
-        console.log(state)
+        // console.log(state)
+        props.updateUser(state)
+    }
+    const {header, type}= props.user
+
+    if(header){
+        const path = type ==='dashen'?'/dashen': 'laoban'
+        return <Redirect to={path}/>
     }
 
     return(
@@ -36,6 +45,6 @@ function DashenInfo(){
 }
 
 export default connect(
-    state=>({}),
-    {}
+    state=>({user: state.user}),
+    {updateUser}
 )(DashenInfo)
