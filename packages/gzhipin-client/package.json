@@ -9,6 +9,7 @@
     "antd-mobile": "^2.3.1",
     "axios": "^0.19.2",
     "customize-cra": "^0.9.1",
+    "js-cookie": "^2.2.1",
     "less-loader": "^5.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -28,7 +29,7 @@
     "build2": "react-scripts build",
     "test3": "react-scripts test"
   },
-  "proxy":"http://localhost:3001",  
+  "proxy": "http://localhost:3001",
   "eslintConfig": {
     "extends": "react-app"
   },

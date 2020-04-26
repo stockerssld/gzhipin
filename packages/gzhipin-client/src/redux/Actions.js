@@ -3,7 +3,7 @@
     Action
     Action
 */
-import {reqRegister,reqLogin, reqUpdateUser} from './../api'
+import {reqRegister,reqLogin, reqUpdateUser, reqUser} from './../api'
 import {AUTH_SUCCESS,ERROR_MSG, RECEIVE_USER, RESET_USER} from './Action-types'
 
 const authSucces=(user)=>({
@@ -85,5 +85,17 @@ export const updateUser = (user)=>{
         }else{
             distpatch(resetUser(result.msg))
         }
+    }
+}
+
+export const getUser = () =>{
+    return async dispatch => {
+        const response = await reqUser()
+        const result = response.data
+        if(result.code===0){
+            dispatch(receiveUser(result.data))
+        }else{
+            dispatch(resetUser(result.msg))
+        }  
     }
 }
