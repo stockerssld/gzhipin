@@ -25,7 +25,7 @@ const navList=[
         component: Laoban,
         title: 'Gran lista de Dios',
         icon: 'dashen',
-        text:'Gran Dios'
+        text:'Gran Dios',
     },
     {
         path: '/dashen',
@@ -54,14 +54,10 @@ function Main(props){
         const userid = Cookies.get('userid')
         const {_id}= props.user
         if(userid && !_id){
-            // conssole.log(userid,'=> id de usuario')
             props.getUser()
-            // console.log(props.getUser())
         }
 
-        // return () => {
-        //     // cleanup
-        // }
+       
     }, [])
     const userid = Cookies.get('userid')
 
@@ -85,6 +81,14 @@ function Main(props){
 
     const path= props.location.pathname
     const currentNav=navList.find(nav=> nav.path===path)
+
+    if(currentNav){
+        if(user.type==='laoban'){
+            navList[1].hide = true
+        }else{
+            navList[0].hide = true
+        }
+    }
 
     return(
         <>

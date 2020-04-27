@@ -7,10 +7,11 @@ const Item = TabBar.Item
 
 
 function NavFooter(props){
-    const {navList}= props
+    let {navList}= props
     const {pathname}=useLocation()
-    // console.log(Location)
-    // const path = props.history.location.pathname
+
+    navList= navList.filter(nav=> !nav.hide)
+    
     return(
         <TabBar>
             {
