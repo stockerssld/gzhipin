@@ -5,11 +5,50 @@ import React, {useEffect} from 'react'
 import {Switch, Route, Redirect} from 'react-router-dom'
 import Cookies from 'js-cookie'
 import {connect} from 'react-redux'
-import LoabanInfo from './../loaban-info'
-import DashenInfo from '../dashen-info'
+
 import {getRedirectTo} from './../../utils'
 import {getUser} from './../../redux/Actions'
 
+import DashenInfo from '../dashen-info'
+import Dashen from './../dashen/index'
+import Laoban from './../laoban/index'
+import LoabanInfo from './../loaban-info'
+import Messages from '../Messages'
+import Personal from '../Personal'
+import NotFound from '../../components/Not-Found/Index'
+import { NavBar } from 'antd-mobile'
+import NavFooter from '../../components/Nav-Footer'
+
+const navList=[
+    {
+        path: '/laoban',
+        component: Laoban,
+        title: 'Gran lista de Dios',
+        icon: 'dashen',
+        text:'Gran Dios'
+    },
+    {
+        path: '/dashen',
+        component: Dashen,
+        title: 'Lista de Jefes',
+        icon: 'laoban',
+        text: 'Jefe'
+    },
+    {
+        path: '/message',
+        component: Messages,
+        title: 'Lista de Mensajes',
+        icon: 'message',
+        text: 'mensaje'
+    },
+    {
+        path: '/personal',
+        component: Personal,
+        title: 'Centro de usuarios',
+        icon: 'personal',
+        text: 'Personal'
+    }
+]
 function Main(props){
     useEffect(() => {
         const userid = Cookies.get('userid')
@@ -44,11 +83,20 @@ function Main(props){
         }
     }
 
+    const path= props.location.pathname
+    const currentNav=navList.find(nav=> nav.path===path)
+
     return(
+        <>
+        {currentNav? <NavBar>{currentNav.title}</NavBar>:null}
         <Switch>
+            {navList.map(nav=> <Route path={nav.path} component={nav.component}/>)}
             <Route path="/laobanInfo" component={LoabanInfo} />
             <Route path='/dashenInfo' component={DashenInfo}/>
+            <Route component={NotFound}/>
         </Switch>
+    {currentNav? <NavFooter navList={navList}/>:null}
+        </>
     )
 }
  

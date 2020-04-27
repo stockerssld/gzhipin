@@ -33,7 +33,7 @@ function  LoabanInfo(props){
 
     const { header, type } = props.user
     if(header){
-        const path = type === 'dashen' ? '/dashen':'/loaban'
+        const path = type === 'dashen' ? '/dashen':'/laoban'
         return <Redirect to={path}/>
     }
 
