@@ -1,4 +1,3 @@
-import React from 'react'
 import Ajax from './ajax'
 
 //Crear nuevo usuario
@@ -9,3 +8,5 @@ export const reqLogin = ({username, password}) =>Ajax('/login', {username, passw
 export const reqUpdateUser = (user) => Ajax('/update', user, 'POST')
 //Obtiene los usuarios
 export const reqUser = () => Ajax('/user')
+
+export const reqUserList =(type)=>Ajax('/userlist', {type})

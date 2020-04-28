@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom'
-import  {NavBar, InputItem, Button, TextareaItem} from 'antd-mobile'
+import  {NavBar, InputItem, Button} from 'antd-mobile'
 import { HeaderSelector } from '../../components/header-selector'
 import {updateUser} from './../../redux/Actions'
 

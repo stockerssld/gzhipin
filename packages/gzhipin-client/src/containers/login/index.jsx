@@ -8,7 +8,6 @@ import {
     List,
     InputItem,
     WhiteSpace,
-    Radio,
     Button
 } from 'antd-mobile'
 import { useState } from 'react'
@@ -17,7 +16,6 @@ import {Redirect} from 'react-router-dom'
 import {login} from './../../redux/Actions' 
 import Logo from '../../components/Logo'
 
-const ListItem=List.Item
 
 const initialValue={
     usename:'',
@@ -35,7 +33,6 @@ function Login(props){
     const handleChange=(name,value)=>{
         setState({...state, [name]: value})
     }
-    const {type}= state
     const toRegister=()=>{
         props.history.replace('/register')
     }

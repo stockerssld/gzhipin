@@ -1,15 +1,21 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import {connect} from 'react-redux'
+import {getUserList} from './../../redux/Actions'
 
-function Loaban (){
+import UserList from './../../components/User-List/index'
+function Loaban ({getUserList,userList}){
+    useEffect(() => {
+        getUserList('dashen')
+    }, [getUserList])
+
     return(
         <>
-        
+            <UserList userList={userList}/>
         </>
     )
 }
 
 export default connect(
-    state=>({}),
-    {}
+    state=>({userList: state.userList}),
+    {getUserList}
 )(Loaban)

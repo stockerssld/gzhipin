@@ -49,24 +49,14 @@ const navList=[
         text: 'Personal'
     }
 ]
-function Main(props){
+function Main({user,getUser, location}){
 
     useEffect(() => {
         const userid = Cookies.get('userid')
-        const {_id}= props.user
-        if(userid && !_id){
-            props.getUser()
-        }
-    }, [])
-    // useEffect(() => {
-    //     const userid = Cookies.get('userid')
-    //     const {_id}= props.user
-    //     if(userid && !_id){
-    //         props.getUser()
-    //     }
-
-       
-    // }, [])
+        const {_id}= user
+        if(userid && !_id)
+            getUser()
+    }, [getUser,user])
 
     const userid = Cookies.get('userid')
 
@@ -74,21 +64,20 @@ function Main(props){
         return <Redirect to='/login'/>
     }
     
-    const {user} = props
     
     // debugger
 
     if(!user._id){
         return null
     } else{
-        let path = props.location.pathname
+        let path = location.pathname
         if(path==='/'){
             path = getRedirectTo(user.type, user.header)
             return <Redirect to={path}/>
         }
     }
 
-    const path= props.location.pathname
+    const path=location.pathname
     const currentNav=navList.find(nav=> nav.path===path)
 
     if(currentNav){
@@ -101,9 +90,9 @@ function Main(props){
 
     return(
         <>
-        {currentNav? <NavBar>{currentNav.title}</NavBar>:null}
+        {currentNav? <NavBar className="sticky-header">{currentNav.title}</NavBar>:null}
         <Switch>
-            {navList.map(nav=> <Route path={nav.path} component={nav.component}/>)}
+            {navList.map(nav=> <Route key={nav.path} path={nav.path} component={nav.component}/>)}
             <Route path="/laobanInfo" component={LoabanInfo} />
             <Route path='/dashenInfo' component={DashenInfo}/>
             <Route component={NotFound}/>

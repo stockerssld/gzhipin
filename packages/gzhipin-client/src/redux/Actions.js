@@ -3,8 +3,8 @@
     Action
     Action
 */
-import {reqRegister,reqLogin, reqUpdateUser, reqUser} from './../api'
-import {AUTH_SUCCESS,ERROR_MSG, RECEIVE_USER, RESET_USER} from './Action-types'
+import {reqRegister,reqLogin, reqUpdateUser, reqUser,reqUserList} from './../api'
+import {AUTH_SUCCESS,ERROR_MSG, RECEIVE_USER, RESET_USER, RECEIVE_USER_LIST} from './Action-types'
 
 const authSucces=(user)=>({
     type: AUTH_SUCCESS,
@@ -23,6 +23,11 @@ const receiveUser=(user)=>({
 export const resetUser=(msg)=>({
     type: RESET_USER, 
     data: msg
+})
+
+export const receiveUserList=(userList)=>({
+    type: RECEIVE_USER_LIST,
+    data: userList
 })
 
 // Action
@@ -98,5 +103,16 @@ export const getUser = () =>{
         }else{
             dispatch(resetUser(result.msg))
         }  
+    }
+}
+
+export const getUserList =(type)=>{
+    return async dispatch=>{
+        const response = await reqUserList(type)
+        const result = response.data
+
+        if(result.code === 0){
+            dispatch(receiveUserList(result.data))
+        }
     }
 }
