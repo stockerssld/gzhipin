@@ -13,8 +13,8 @@ export function HeaderSelector(props){
         for (let i = 0; i < 20; i++) {
             //     
             headerList.push({
-                text:"imagen "+`${i+1}`,
-                icon:require(`./Images/imagen${i+1}.png`)
+                text:"imagen"+`${i+1}`,
+                icon:require(`./../../assets/Images/imagen${i+1}.png`)
             })       
         }
     // },[])

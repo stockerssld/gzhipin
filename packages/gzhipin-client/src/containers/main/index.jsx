@@ -50,15 +50,24 @@ const navList=[
     }
 ]
 function Main(props){
+
     useEffect(() => {
         const userid = Cookies.get('userid')
         const {_id}= props.user
         if(userid && !_id){
             props.getUser()
         }
+    }, [])
+    // useEffect(() => {
+    //     const userid = Cookies.get('userid')
+    //     const {_id}= props.user
+    //     if(userid && !_id){
+    //         props.getUser()
+    //     }
 
        
-    }, [])
+    // }, [])
+
     const userid = Cookies.get('userid')
 
     if(!userid){
@@ -99,7 +108,7 @@ function Main(props){
             <Route path='/dashenInfo' component={DashenInfo}/>
             <Route component={NotFound}/>
         </Switch>
-    {currentNav? <NavFooter navList={navList}/>:null}
+        {currentNav? <NavFooter navList={navList}/>:null}
         </>
     )
 }

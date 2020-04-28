@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom'
 import  {NavBar, InputItem, TextareaItem, Button} from 'antd-mobile'
-import { HeaderSelector } from '../../components/Logo/header-selector'
+import { HeaderSelector } from '../../components/header-selector'
 import {updateUser} from './../../redux/Actions'
 const initialState={
     header:'',
@@ -14,7 +14,6 @@ const initialState={
 
 function  LoabanInfo(props){
     const [state, setstate] = useState(initialState)
-    console.log(state,"state")
 
     // header
     const setHeader=(header)=>{
@@ -27,7 +26,8 @@ function  LoabanInfo(props){
     }
     
     const save=(e)=>{
-        // console.log(state)
+        console.log(state)
+
         props.updateUser(state)
     }
 

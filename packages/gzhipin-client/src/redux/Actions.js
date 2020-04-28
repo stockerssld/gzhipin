@@ -20,7 +20,7 @@ const receiveUser=(user)=>({
     data: user
 })
 
-const resetUser=(msg)=>({
+export const resetUser=(msg)=>({
     type: RESET_USER, 
     data: msg
 })
@@ -77,13 +77,14 @@ export const login=(user)=>{
 }
 
 export const updateUser = (user)=>{
-    return async distpatch=>{
+    return async dispatch=>{
+        console.log(user)
         const response= await reqUpdateUser(user)
         const result = response.data
         if(result.code===0){
-            distpatch(receiveUser(result.data))
+            dispatch(receiveUser(result.data))
         }else{
-            distpatch(resetUser(result.msg))
+            dispatch(resetUser(result.msg))
         }
     }
 }

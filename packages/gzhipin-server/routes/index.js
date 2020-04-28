@@ -68,30 +68,34 @@ router.post('/login', function( req, res, next){
 })
 
 
-router.post('/update', function(req, res){
-	const userid=req.cookies.userid
-	// console.log(userid)
-	if(!userid){	
-		return res.send({code:1, msg:'Debe iniciar sesión primero'})
+
+// 更新用户信息的路由
+router.post('/update', function (req, res) {
+	// 从请求的cookie得到userid
+	const userid = req.cookies.userid
+	// 如果不存在, 直接返回一个提示信息
+	if(!userid) {
+	  return res.send({code: 1, msg: '请先登陆'})
 	}
-	const user = req.body
-	// console.log(req)
-	// res.json({req:req.cookies})
-	UserModel.findByIdAndUpdate({_id: userid},user, function(error, oldUser){
-		if(!oldUser){
-			res.clearCookie('userid')
-			res.send({code:1,msg:'por favor iniciar primero'})
-		}else{
-			const { _id, username, type }=oldUser
-			const data = Object.assign({ _id, username, type }, user)
-			  
-			res.send({code: 0, data})
-			// return res.json({status:"Operación Realizada", user:data})
-		}
+	// 存在, 根据userid更新对应的user文档数据
+	// 得到提交的用户数据
+	const user = req.body // 没有_id
+	UserModel.findByIdAndUpdate({_id: userid}, user, function (error, oldUser) {
+  
+	  if(!oldUser) {
+		// 通知浏览器删除userid cookie
+		res.clearCookie('userid')
+		// 返回返回一个提示信息
+		res.send({code: 1, msg: '请先登陆'})
+	  } else {
+		// 准备一个返回的user数据对象
+		const {_id, username, type} = oldUser
+		const data = Object.assign({_id, username, type}, user)
+		// 返回
+		res.send({code: 0, data})
+	  }
 	})
-
-
-})
+  })
 
 router.get('/user', function(req, res){
 	const userid = req.cookies.userid
