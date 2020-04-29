@@ -18,6 +18,7 @@ import Personal from '../Personal'
 import NotFound from '../../components/Not-Found/Index'
 import { NavBar } from 'antd-mobile'
 import NavFooter from '../../components/Nav-Footer'
+import Chat from '../Chat'
 
 const navList=[
     {
@@ -95,6 +96,7 @@ function Main({user,getUser, location}){
             {navList.map(nav=> <Route key={nav.path} path={nav.path} component={nav.component}/>)}
             <Route path="/laobanInfo" component={LoabanInfo} />
             <Route path='/dashenInfo' component={DashenInfo}/>
+            <Route path='/Chat/:userid' component={Chat}/>
             <Route component={NotFound}/>
         </Switch>
         {currentNav? <NavFooter navList={navList}/>:null}

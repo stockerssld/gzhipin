@@ -3,8 +3,21 @@
     Action
     Action
 */
+import io from 'socket.io-client'
 import {reqRegister,reqLogin, reqUpdateUser, reqUser,reqUserList} from './../api'
 import {AUTH_SUCCESS,ERROR_MSG, RECEIVE_USER, RESET_USER, RECEIVE_USER_LIST} from './Action-types'
+
+
+function initIO(){
+    if(!io.socket){
+        io.socket('ws://localhost:3001')
+
+        io.socket.on('receiveMsg', function(data){
+            console.log('El cliente recive el mensaje enviado por el servidor',data)
+        })
+    }
+}
+
 
 const authSucces=(user)=>({
     type: AUTH_SUCCESS,
@@ -114,5 +127,13 @@ export const getUserList =(type)=>{
         if(result.code === 0){
             dispatch(receiveUserList(result.data))
         }
+    }
+}
+
+export const sendMsg=({from, to, content})=>{
+    return  dispatch=>{
+        console.log('', {from, to, content})
+        initIO()
+        io.Socket.emit('sendMsg', {from, to, content})
     }
 }
