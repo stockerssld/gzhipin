@@ -7,7 +7,7 @@ import store from './redux/Store'
 import Register from './containers/register'
 import Login from './containers/login'
 import Main from './containers/main'
-import './test/socketio_test'
+import './SocketIo/index'
 function Router(){
     return(
         <Provider store={store}>

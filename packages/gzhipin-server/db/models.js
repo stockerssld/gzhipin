@@ -23,7 +23,18 @@ const userSchema = mongoose.Schema({
     salary: {type: String}
 })
 
+const chatShema = mongoose.Schema({
+    from: {type: String, require: true},
+    to: {type: String, require:true},
+    chat_id:{ type: String, require: true},
+    content: {type: String, require: true},
+    read: {type: Boolean, default: false},
+    create_time: {type: Number}
+})
+
 const UserModel = mongoose.model('user',userSchema)
+const ChatModel = mongoose.model('chat', chatShema)
+
 
 exports.UserModel = UserModel
-
+exports.ChatModel = ChatModel
