@@ -8,13 +8,12 @@ module.exports = function(server){
 
         socket.on('sendMsg', function({from, to, content}){
             console.log('El servidor recibio el mensaje enviado por el cliente.',{from, to, content})
-            const chat_id = [from, to].sort().join('_')
+            const chat_id = [from, to].sort().join('_') //from_to to_from
             const create_time= Date.now()
-            new ChatModel({from, to, content, chat_id, create_time}.save(function(err, chatMsjs){
-
-            }))
+            new ChatModel({from, to, content, chat_id, create_time}).save(function(err, chatMsjs){
+                io.emit('receiveMsg', chatMsjs)
+            })
         })
     })
 }
 
-video 57

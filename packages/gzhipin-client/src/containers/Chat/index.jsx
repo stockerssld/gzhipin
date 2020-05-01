@@ -27,7 +27,7 @@ function Chat(props){
     return(
         <>
             <div id='chat-page'>
-                <NavBar> AA </NavBar>
+                <NavBar> {} </NavBar>
                 <List>
                     {/* <Item thumb={require(``)}>
 
