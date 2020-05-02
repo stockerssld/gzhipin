@@ -23,15 +23,46 @@ function Chat(props){
         setState({content: ''})
 
     }
+    const {user}=props
+    const {users, chatMsgs} = props.chat
+
+    const meID = user._id
+    if(!users[meID]){
+        return null
+    }
+    const targetID= props.match.params.userid
+    const chatId = [meID, targetID].sort().join('_')
+
+    const msgs = chatMsgs.filter(msg=>msg.chat_id===chatId)
+
+    const targetHeader = users[targetID].header
+    const targerIcon = targetHeader ? require(`./../../assets/Images/${targetHeader}.png`):null
 
     return(
         <>
             <div id='chat-page'>
                 <NavBar> {} </NavBar>
                 <List>
-                    {/* <Item thumb={require(``)}>
-
-                    </Item> */}
+                    {
+                        msgs.map(msg=>{
+                            if(targetID===msg.from){
+                                return(
+                                    <Item 
+                                        key={msg._id}
+                                        thumb={targerIcon}>
+                                        {msg.content}
+                                    </Item>
+                                )
+                            }else{
+                                return(
+                                    <Item key={msg._id} className="chat-me"
+                                    extra="aloja">
+                                        {msg.content}
+                                    </Item>
+                                )
+                            }     
+                        })
+                    }
                 </List>
 
                 <div className='am-tab-bar'>
@@ -49,6 +80,6 @@ function Chat(props){
     )
 }
 export default connect(
-    state=>({user: state.user}),
+    state=>({user: state.user, chat: state.chat}),
     {sendMsg}
 )(Chat)

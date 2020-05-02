@@ -10,3 +10,7 @@ export const reqUpdateUser = (user) => Ajax('/update', user, 'POST')
 export const reqUser = () => Ajax('/user')
 
 export const reqUserList =(type)=>Ajax('/userlist', {type})
+
+export const reqChatMsgList = ()=> Ajax('/msglist')
+
+export const reqReadMsg = (from) => Ajax('/readmsg', {from}, 'POST')
