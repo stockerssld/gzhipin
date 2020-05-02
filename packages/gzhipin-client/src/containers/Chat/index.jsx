@@ -1,17 +1,27 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 
 import {connect} from 'react-redux'
-import { NavBar, List, InputItem } from 'antd-mobile'
+import { NavBar, List, InputItem, Grid } from 'antd-mobile'
 import {sendMsg} from './../../redux/Actions'
 
 const {Item} =List
 
 let initialState={
-    content:'s'
+    content:'',
+    isShow: false,
 }
-
+let emojis=[]
 function Chat(props){
     const [state, setState] = useState(initialState)
+    useEffect(() => {
+        emojis= ['😀','😁','😆','😅','🤣','🤔',
+        '🙂','🙃', '😇','🥰','😍','😘','🙂','🙃', '😇',
+                '🤩']
+        emojis = emojis.map(emoji=>({text: emoji}))
+        // return () => {
+        //     emojis=[]
+        // }
+    }, [])
     const handleSend =()=>{
         const from = props.user._id
         const to = props.match.params.userid
@@ -20,7 +30,11 @@ function Chat(props){
         if(connect){
             props.sendMsg({from, to, content})
         }
-        setState({content: ''})
+        setState({
+            ...state,
+            content: '',
+            isShow: false
+        })
 
     }
     const {user}=props
@@ -38,6 +52,17 @@ function Chat(props){
     const targetHeader = users[targetID].header
     const targerIcon = targetHeader ? require(`./../../assets/Images/${targetHeader}.png`):null
 
+    const toggleShow= ()=>{
+        const isShow = !state.isShow
+        setState({...state,
+            isShow
+        })
+        if(isShow){
+            setTimeout(()=>{
+                window.dispatchEvent(new Event('resize'))
+            },0)
+        }
+    }
     return(
         <>
             <div id='chat-page'>
@@ -68,12 +93,29 @@ function Chat(props){
                 <div className='am-tab-bar'>
                     <InputItem
                         onChange={val=> setState({content: val})}
+                        onFocus={()=>setState({...state, isShow: false})}
                         value={state.content}
                         placeholder= 'Escriba un mensaje'
                         extra={
-                            <span onClick={handleSend}>Enviar</span>
+                            <span>
+                                <span onClick={toggleShow} style={{marginRight:5}}>😀</span>
+                                <span onClick={handleSend}>Enviar</span>
+                            </span>
                         }
                     />
+                    {state.isShow ? (
+                        <Grid
+                        data={emojis}
+                        columnNum={8}
+                        carouselMaxRow={4}
+                        isCarousel={true}
+                        onClick={(item)=>{
+                            setState({...state,content: state.content + item.text})
+                            // setState({content: state.content + item.text})
+                        }}
+                        />
+                    ) : null}
+                    
                 </div>
             </div>
         </>
