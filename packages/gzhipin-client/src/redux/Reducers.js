@@ -3,7 +3,7 @@
     Reducer: state, action, state
 */
 import {combineReducers} from 'redux'
-import {AUTH_SUCCESS,ERROR_MSG, RECEIVE_USER, RESET_USER, RECEIVE_USER_LIST, RECEIVE_MSG, RECEIVE_MSG_LIST} from './Action-types'
+import {AUTH_SUCCESS,ERROR_MSG, RECEIVE_USER, RESET_USER, RECEIVE_USER_LIST, RECEIVE_MSG, RECEIVE_MSG_LIST, MSG_READ} from './Action-types'
 import {getRedirectTo} from './../utils/index'
 
 
@@ -44,25 +44,51 @@ function userList(state=initUserList, action){
 
 const initChat={
     users:{},
-    chatMsg: [],
+    chatMsgs: [],
     unReadCount: 0,
 }
+function chat(state=initChat, action) {
+    switch (action.type) {
+      case RECEIVE_MSG_LIST:  // data: {users, chatMsgs}
+        const {users, chatMsgs, userid} = action.data
+        return {
+          users,
+          chatMsgs,
+          unReadCount: chatMsgs.reduce((preTotal, msg) => preTotal+(!msg.read&&msg.to===userid?1:0),0)
+        }
+      case RECEIVE_MSG: // data: chatMsg
+        const {chatMsg} = action.data
+        return {
+          users: state.users,
+          chatMsgs: [...state.chatMsgs, chatMsg],
+          unReadCount: state.unReadCount + (!chatMsg.read&&chatMsg.to===action.data.userid?1:0)
+        }
+      case MSG_READ:
+        const {from, to, count} = action.data
+        state.chatMsgs.forEach(msg => {
+          if(msg.from===from && msg.to===to && !msg.read) {
+            msg.read = true
+          }
+        })
+        return {
+          users: state.users,
+          chatMsgs: state.chatMsgs.map(msg => {
+            if(msg.from===from && msg.to===to && !msg.read) { // 需要更新
+              
+              return {...msg, read: true}
+            } else {// 不需要
+              // console.log(msg)
 
-function chat(state=initChat, action){
-    switch(action.type){
-        case RECEIVE_MSG_LIST:
-            const {users, chatMsgs} = action.data
-            return{
-                users,
-                chatMsgs,
-                unReadCount: 0
+              return msg
             }
-        case RECEIVE_MSG:
-            return
-        default:
-            return state
+          }),
+          unReadCount: state.unReadCount-count
+        }
+      default:
+        return state
     }
-}
+  }
+  
 
 
 export default combineReducers({

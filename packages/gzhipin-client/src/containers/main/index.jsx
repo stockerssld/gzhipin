@@ -50,7 +50,7 @@ const navList=[
         text: 'Personal'
     }
 ]
-function Main({user,getUser, location}){
+function Main({user,getUser, location, unReadCount}){
 
     useEffect(() => {
         const userid = Cookies.get('userid')
@@ -88,6 +88,7 @@ function Main({user,getUser, location}){
             navList[0].hide = true
         }
     }
+    // console.log(unReadCount)
 
     return(
         <>
@@ -99,13 +100,20 @@ function Main({user,getUser, location}){
             <Route path='/Chat/:userid' component={Chat}/>
             <Route component={NotFound}/>
         </Switch>
-        {currentNav? <NavFooter navList={navList}/>:null}
+        {currentNav? <NavFooter navList={navList} unReadCount={unReadCount}/>:null}
         </>
     )
 }
+
+const stateToProps = state=>{
+    // console.log(state)
+    return{
+        user: state.user, unReadCount: state.chat.unReadCount
+    }
+}
  
 export default connect(
-    state=>({user: state.user}),
+    stateToProps,
     {getUser}
 )(Main)
 

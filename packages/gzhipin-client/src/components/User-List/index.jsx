@@ -2,13 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { WingBlank, WhiteSpace, Card } from 'antd-mobile'
 import {withRouter} from 'react-router-dom'
+import QueueAnim from 'rc-queue-anim'
+
 const {Header,Body} = Card
+
 function UserList(props){
     const {userList}= props
     
     return(
         <WingBlank style={{marginBottom:50, marginTop:50}}>
-           
+            <QueueAnim type='left' delay={100}>
                 {
                     userList.map(user=>(
                         <div key={user._id}>
@@ -27,6 +30,7 @@ function UserList(props){
                         </div>
                     ))
                 }
+            </QueueAnim>
         </WingBlank>
     )
 }

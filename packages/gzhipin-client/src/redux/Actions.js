@@ -20,7 +20,8 @@ import {
   RESET_USER,
   RECEIVE_USER_LIST,
   RECEIVE_MSG,
-  RECEIVE_MSG_LIST
+  RECEIVE_MSG_LIST,
+  MSG_READ
 } from "./Action-types";
 
 
@@ -43,23 +44,52 @@ export const resetUser = (msg) => ({
   data: msg,
 });
 
-export const receiveUserList = (userList) => ({
+const receiveUserList = (userList) => ({
   type: RECEIVE_USER_LIST,
   data: userList,
 });
 
-export const receiveMsgList = ({users, chatMsgs})=>({
+const receiveMsgList = ({users, chatMsgs, userid})=>({
   type: RECEIVE_MSG_LIST,
-  data: {users, chatMsgs}
+  data: {users, chatMsgs,userid}
 })
-function initIO() {
+
+const receiveMsg =(chatMsg, userid)=>({
+  type: RECEIVE_MSG, data: {chatMsg, userid}
+})
+
+const msgRead = ({count, from, to}) => ({
+  type: MSG_READ, data: {count, from, to}
+})
+
+
+function initIO(dispatch, userid) {
     if (!io.socket) {
-      io.socket= io("ws://localhost:3001");
+      io.socket= io("ws://192.168.8.182:3001");
+      
       io.socket.on("receiveMsg", function (chatMsg) {
         console.log("El cliente recive el mensaje enviado por el servidor", chatMsg);
+        // debugger
+        if(userid===chatMsg.from || userid===chatMsg.to){
+          dispatch(receiveMsg(chatMsg, userid))
+        }
       });
     }
+   
 }
+
+
+export const readMsg = (from, to) => {
+  return async dispatch => {
+    const response = await reqReadMsg(from)
+    const result = response.data
+    if(result.code===0) {
+      const count = result.data
+      dispatch(msgRead({count, from, to}))
+    }
+  }
+}
+
 
 export const sendMsg = ({ from, to, content }) => {
   return (dispatch) => {
@@ -68,16 +98,16 @@ export const sendMsg = ({ from, to, content }) => {
   };
 };
 
-async function getMsgList(dispatch){
-  initIO();
+async function getMsgList(dispatch, userid){
+  initIO(dispatch,userid);
   const response = await reqChatMsgList()
   const result = response.data
   if(result.code===0){
     const {users, chatMsgs} = result.data
-    receiveMsgList({users, chatMsgs}) 
-    dispatch(receiveMsgList({users, chatMsgs}))
+    dispatch(receiveMsgList({users, chatMsgs, userid}))
   }
 }
+
 
 // Action
 export const register = (user) => {
@@ -98,7 +128,7 @@ export const register = (user) => {
     const response = await reqRegister({ username, password, type });
     const result = response.data; // {code 0/1, data: user, msg:'}
     if (result.code === 0) {
-      getMsgList(dispatch)
+      getMsgList(dispatch, result.data._id)
       dispatch(authSucces(result.data));
     } else {
       dispatch(errorMsg(result.msg));
@@ -123,7 +153,7 @@ export const login = (user) => {
     const response = await reqLogin(user);
     const result = response.data;
     if (result.code === 0) {
-      getMsgList(dispatch)
+      getMsgList(dispatch, result.data._id)
       dispatch(authSucces(result.data));
     } else {
       dispatch(errorMsg(result.msg));
@@ -148,8 +178,9 @@ export const getUser = () => {
   return async (dispatch) => {
     const response = await reqUser();
     const result = response.data;
+    console.log(result)
     if (result.code === 0) {
-      getMsgList(dispatch)
+      getMsgList(dispatch, result.data._id)
       dispatch(receiveUser(result.data));
     } else {
       dispatch(resetUser(result.msg));

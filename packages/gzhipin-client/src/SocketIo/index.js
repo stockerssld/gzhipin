@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 
 //Conecta al servidor para obtener el objeto de conexion con el servidor
-const socket = io('ws://localhost:3001')
+const socket = io('ws://192.168.8.182:3001')
 
 //Enviar mensaje
 socket.emit('sendMsg',{name: 'abc'})
